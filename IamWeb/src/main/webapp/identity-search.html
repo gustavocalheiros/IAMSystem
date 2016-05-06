@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+<!--     <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>Search Identity</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/jumbotron-narrow.css" rel="stylesheet">
+
+	<script type="text/javascript" src="js/ajax-requests.js"></script>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="index.html">Home</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">I AM Web</h3>
+      </div>
+
+      <div id="pageTitle" class="jumbotron">
+        <h1>Search Identity</h1>
+      </div>
+
+      <div class="row marketing">
+        <div id="creationTable">
+          <h4>First Name</h4>
+          <input type="text" name="fname" class="form-control" required autofocus>
+		  <br>
+          <h4>Last Name</h4>
+          <input type="text" name="lname" class="form-control" required>
+		  <br>
+          <h4>Email</h4>
+          <input type="email" name="email" class="form-control" required>
+          <br>
+          <h4>Birth Date</h4>
+          <input type="date" name="birthdate" class="form-control" required>
+        </div>
+        <br><br><br>
+        
+        <div style="text-align: center;">
+        	<p><a class="btn btn-lg btn-danger" onclick="handleRequest('SearchIdentity')" role="button">search!</a></p>
+		</div>
+      </div>
+      
+  <div class="container">
+  <h2>Results</h2>
+  <table class="table">
+    <thead>
+      <tr>
+      	<th>Selection</th>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>Birth Date</th>
+      </tr>
+    </thead>
+    <tbody id="resultsBody">
+    </tbody>
+  </table>
+  </div>
+  <div class="form-group">
+  		<tr>
+        <div class=" col-sm-offset-2 col-sm-10 text-right">
+        <a class="btn btn-primary" onclick="handleRequest('UpdateIdentity')" role="button">edit!</a>
+        <a class="btn btn-primary" onclick="handleRequest('DeleteIdentity')" role="button">delete!</a>
+        <a class="btn btn-primary" onclick="handleRequest('Cancel')" role="button">cancel</a>
+        </div>
+      </tr>  
+    </div>
+
+      <footer class="footer">
+        <p>&copy; 2016 Gustavo Calheiros</p>
+      </footer>
+
+    </div> <!-- /container -->
+  </body>
+</html>
