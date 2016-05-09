@@ -38,7 +38,8 @@ public class LoginServlet extends GenericSpringServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// do nothing
+
+		getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 	}
 
 	/**

@@ -14,7 +14,7 @@
      
     <bean id="dataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"/>
-		<property name="url" value="jdbc:derby://localhost:1527/IAM;create=true"/>
+		<property name="url" value="jdbc:derby://localhost:1527/memory:IAM;create=true"/>
 		<property name="username" value="tom"/>
 		<property name="password" value="tom"/>
 	</bean>
@@ -30,7 +30,7 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.connection.autocommit">false</prop>
 			</props>
 		</property>

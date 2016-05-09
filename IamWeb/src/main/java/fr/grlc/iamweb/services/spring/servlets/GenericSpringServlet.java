@@ -11,6 +11,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -22,43 +23,55 @@ import fr.grlc.iamcore.datamodel.Identity;
  */
 public class GenericSpringServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	//LINK THE WEBCONTEXT WITH THE SPRING CONTEXT
+
+	protected final String sessionUser = "user";
+
+	// LINK THE WEBCONTEXT WITH THE SPRING CONTEXT
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
-	
-	public Identity parseIdentity(HttpServletRequest request) throws IOException{
 
-		String str = "";
-		BufferedReader reader = request.getReader();
-		String part = "";
-		while (part !=  null)
-		{
-			str += part;
-			part = reader.readLine();
-		}
-		
-		JSONObject json = new JSONObject(str);
-		
-		String fname = json.getString("fname");
-		String lname = json.getString("lname");
-		String email = json.getString("email");
-		String dateStr = json.getString("birthdate");
-		
-		dateStr = dateStr.replace("-", "/");
-		
-		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		
-		Date date = null;
+	protected boolean isLoggedIn(HttpServletRequest request) {
+		HttpSession session = request.getSession(false); // false = do not
+															// create
+
+		return session != null && session.getAttribute(sessionUser) != null;
+	}
+
+	protected Identity parseIdentity(HttpServletRequest request) throws IOException {
+
 		try {
-			date = (Date)formatter.parse(dateStr);
-		} catch (ParseException e) {
+			String str = "";
+			BufferedReader reader = request.getReader();
+			String part = "";
+			while (part != null) {
+				str += part;
+				part = reader.readLine();
+			}
+
+			JSONObject json = new JSONObject(str);
+			// String x= request.getParameter("data");
+			// JSONObject json = new JSONObject(x);
+
+			String fname = json.getString("fname");
+			String lname = json.getString("lname");
+			String email = json.getString("email");
+			String dateStr = json.getString("birthdate");
+
+			dateStr = dateStr.replace("-", "/");
+
+			DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+
+			Date date = null;
+
+			date = (Date) formatter.parse(dateStr);
+
+			return new Identity(fname, lname, email, date);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return new Identity(fname, lname, email, date);
+		return null;
 	}
 }

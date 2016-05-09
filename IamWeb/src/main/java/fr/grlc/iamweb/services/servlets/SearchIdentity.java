@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.grlc.iamcore.datamodel.Identity;
-import fr.grlc.iamcore.services.dao.impl.IdentityHibernateDAO;
+import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
@@ -31,86 +31,59 @@ public class SearchIdentity extends GenericSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
-	IdentityHibernateDAO dao;
-	
+	IdentityDAOInterface dao;
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String str = "";
-		BufferedReader reader = request.getReader();
-		String part = "";
-		while (part !=  null)
-		{
-			str += part;
-			part = reader.readLine();
-		}
-		
-		JSONObject json = new JSONObject(str);
-		
-		String fname = json.getString("fname");
-		String lname = json.getString("lname");
-		String email = json.getString("email");
-		String dateStr = json.getString("birthdate");
-		
-		dateStr = dateStr.replace("-", "/");
-		
-		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		
-		Date date = null;
-		try {
-			date = (Date)formatter.parse(dateStr);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-
-		Identity id = new Identity(fname, lname, email, date);
-		
-		List<Identity> list = dao.search(id);
-
-		JSONArray jsonArray = new JSONArray();
-		
-		for (Identity identity : list) {
-			JSONObject idJson = new JSONObject();
-			idJson.put("fname", identity.getFirstName());
-			idJson.put("lname", identity.getLastName());
-			idJson.put("email", identity.getEmail());
-			idJson.put("birthdate", identity.getBirthDate());
-			jsonArray.put(idJson);
-		}
-
-		PrintWriter out = response.getWriter();
-		out.print(jsonArray);
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		if(!isLoggedIn(request))
+			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		else
+			getServletContext().getRequestDispatcher("/search-identity.html").forward(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		if(!isLoggedIn(request))
+			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		
 		Identity id = parseIdentity(request);
-		
-		List<Identity> list = dao.search(id);
 
-		JSONArray jsonArray = new JSONArray();
-		JSONObject status = new JSONObject();
-		status.put("status", "200");
-		
-		jsonArray.put(status);
-		
-		
-		for (Identity identity : list) {
-			JSONObject idJson = new JSONObject();
-			idJson.put("fname", identity.getFirstName());
-			idJson.put("lname", identity.getLastName());
-			idJson.put("email", identity.getEmail());
-			idJson.put("birthdate", identity.getBirthDate());
-			jsonArray.put(idJson);
+		if (id != null) {
+			List<Identity> list = dao.search(id);
+
+			JSONArray jsonArray = new JSONArray();
+			JSONObject status = new JSONObject();
+			status.put("status", "200");
+
+			jsonArray.put(status);
+
+			for (Identity identity : list) {
+				JSONObject idJson = new JSONObject();
+				idJson.put("fname", identity.getFirstName());
+				idJson.put("lname", identity.getLastName());
+				idJson.put("email", identity.getEmail());
+				idJson.put("birthdate", identity.getBirthDate());
+				jsonArray.put(idJson);
+			}
+
+			PrintWriter out = response.getWriter();
+			out.print(jsonArray);
+		} else {
+
+			PrintWriter out = response.getWriter();
+			JSONObject status = new JSONObject();
+			status.put("status", "400");
+			out.print(status);
 		}
-
-		PrintWriter out = response.getWriter();
-		out.print(jsonArray);
 	}
 
 }

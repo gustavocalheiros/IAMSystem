@@ -29,6 +29,7 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 	public List<Identity> readAll() {
 
 		Session session = factory.openSession();
+		@SuppressWarnings("unchecked")
 		List<Identity> list = session.createQuery("from Identity").list();
 
 		return list;
@@ -36,7 +37,7 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 
 	@Override
 	public List<Identity> search(Identity identity) {
-		// TODO WHERECLAUSEBUILDER adriana
+
 		Session session = factory.openSession();
 		String q = "from Identity identity where identity.email = :email and "
 				+ "identity.firstName = :firstName and identity.lastName = :lastName and "

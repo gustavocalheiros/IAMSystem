@@ -45,6 +45,12 @@ public class Identity {
 		
 	}
 	
+	public Identity(String firstName, String lastName, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+	}
+	
 	public Identity(String firstName, String lastName, String email, Date birthdate) {
 		super();
 		this.firstName = firstName;
