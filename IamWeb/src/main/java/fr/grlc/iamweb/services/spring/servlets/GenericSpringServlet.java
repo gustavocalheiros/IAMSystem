@@ -2,8 +2,8 @@ package fr.grlc.iamweb.services.spring.servlets;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,8 +11,11 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -24,6 +27,8 @@ import fr.grlc.iamcore.datamodel.Identity;
 public class GenericSpringServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	final static Logger logger = Logger.getLogger(GenericSpringServlet.class);
+	
 	protected final String sessionUser = "user";
 
 	// LINK THE WEBCONTEXT WITH THE SPRING CONTEXT
@@ -31,6 +36,8 @@ public class GenericSpringServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+		
+		logger.info("INIT CALLED!!!!!!!!!!!!!!");
 	}
 
 	protected boolean isLoggedIn(HttpServletRequest request) {
@@ -39,35 +46,37 @@ public class GenericSpringServlet extends HttpServlet {
 
 		return session != null && session.getAttribute(sessionUser) != null;
 	}
+	
+	protected void writeLoginNeededInfo(HttpServletResponse response) throws IOException{
+		PrintWriter out = response.getWriter();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject status = new JSONObject();
+		status.put("status", "408");
+		jsonArray.put(status);
+		out.print(jsonArray);
+	}
 
 	protected Identity parseIdentity(HttpServletRequest request) throws IOException {
 
 		try {
-			String str = "";
-			BufferedReader reader = request.getReader();
-			String part = "";
-			while (part != null) {
-				str += part;
-				part = reader.readLine();
-			}
+			 String x= request.getParameter("data");
+			 JSONObject json = new JSONObject(x);
 
-			JSONObject json = new JSONObject(str);
-			// String x= request.getParameter("data");
-			// JSONObject json = new JSONObject(x);
-
+			Identity id = new Identity();
+			
 			String fname = json.getString("fname");
 			String lname = json.getString("lname");
 			String email = json.getString("email");
 			String dateStr = json.getString("birthdate");
 
-			dateStr = dateStr.replace("-", "/");
-
-			DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
 			Date date = null;
-
-			date = (Date) formatter.parse(dateStr);
-
+			if(!dateStr.isEmpty()){
+				dateStr = dateStr.replace("-", "/");
+	
+				DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+	
+				date = (Date) formatter.parse(dateStr);
+			}
 			return new Identity(fname, lname, email, date);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -57,6 +57,13 @@
 				<artifactId>hibernate-core</artifactId>
 				<version>4.3.11.Final</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
+			</dependency>
+			
 		<!-- test with derby memory -->
 		<dependency>
 			<groupId>org.apache.derby</groupId>

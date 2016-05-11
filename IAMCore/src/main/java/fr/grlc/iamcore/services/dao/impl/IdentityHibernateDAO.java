@@ -1,5 +1,6 @@
 package fr.grlc.iamcore.services.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -39,17 +40,44 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 	public List<Identity> search(Identity identity) {
 
 		Session session = factory.openSession();
-		String q = "from Identity identity where identity.email = :email and "
-				+ "identity.firstName = :firstName and identity.lastName = :lastName and "
-				+ "identity.birthDate = :birthDate";
-		
+		String q = "from Identity identity where ";
+
+		String fname = identity.getFirstName();
+		String lname = identity.getLastName();
+		String email = identity.getEmail();
+		Date date = identity.getBirthDate();
+		String and = " and ";
+
+		if (fname != null && !fname.isEmpty()) {
+			q += "identity.firstName = " + "\'" + fname + "\'";
+			q += and;
+		}
+
+		if (lname != null && !lname.isEmpty()) {
+			q += "identity.lastName = " + "\'" + lname + "\'";
+			q += and;
+		}
+
+		if (email != null && !email.isEmpty()) {
+			q += "identity.email = " + "\'" + email + "\'";
+			q += and;
+		}
+
+		if (date != null) {
+			q += "identity.birthDate = :birthDate";
+		} else {
+			int end = q.lastIndexOf(and);
+			if (end == q.length() - and.length()) {
+				q = q.substring(0, end);
+			}
+		}
+
 		Query query = session.createQuery(q);
-		
-		query.setString("email", identity.getEmail());
-		query.setString("firstName", identity.getFirstName());
-		query.setString("lastName", identity.getLastName());
-		query.setDate("birthDate", identity.getBirthDate());
-		
+
+		if (date != null) {
+			query.setDate("birthDate", identity.getBirthDate());
+		}
+
 		return query.list();
 	}
 

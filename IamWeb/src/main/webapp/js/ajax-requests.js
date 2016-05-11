@@ -20,8 +20,12 @@ function handleRequest(action) {
 function showSearchResult(xhr) {
 	data = JSON.parse(xhr.responseText);
 
-	if (data[0].status == '200') {
-		var table = document.getElementById("resultsBody");
+	var table = document.getElementById("resultsBody");
+	table.innerHTML = '';
+
+	if (data[0].status == '408') {
+		window.location.href = "index.html";
+	} else if (data[0].status == '200') {
 
 		for (var i = 1; i < data.length; i++) {
 
@@ -54,7 +58,9 @@ function showMessageSucess(xhr) {
 
 	myData = JSON.parse(xhr.responseText);
 
-	if (myData.status == '200') {
+	if (myData.status == '408') {
+		window.location.href = "home.html";
+	} else if (myData.status == '200') {
 		var msg = document.getElementById("pageTitle");
 
 		var h3 = document.createElement("h3");
@@ -100,8 +106,8 @@ function load(url, callback) {
 	}
 
 	xhr.open('POST', url, true);
-	// xhr.send("data=" + JSON.stringify(data));
-	xhr.send(JSON.stringify(data));
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send("data=" + JSON.stringify(data));
 }
 
 function login(action) {

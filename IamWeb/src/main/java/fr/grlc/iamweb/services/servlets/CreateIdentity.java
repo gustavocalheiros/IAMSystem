@@ -32,7 +32,7 @@ public class CreateIdentity extends GenericSpringServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 		else
 			getServletContext().getRequestDispatcher("/create-identity.html").forward(request, response);
 	}
@@ -42,8 +42,10 @@ public class CreateIdentity extends GenericSpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		if(!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		if(!isLoggedIn(request)){
+			writeLoginNeededInfo(response);
+			return;
+		}
 		
 		Identity id = parseIdentity(request);
 		dao.write(id);

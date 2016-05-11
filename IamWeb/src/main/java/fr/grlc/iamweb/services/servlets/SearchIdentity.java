@@ -1,12 +1,7 @@
 package fr.grlc.iamweb.services.servlets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -40,7 +35,7 @@ public class SearchIdentity extends GenericSpringServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if(!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 		else
 			getServletContext().getRequestDispatcher("/search-identity.html").forward(request, response);
 	}
@@ -52,8 +47,10 @@ public class SearchIdentity extends GenericSpringServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		if(!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/Login").forward(request, response);
+		if(!isLoggedIn(request)){
+			writeLoginNeededInfo(response);
+			return;
+		}
 		
 		Identity id = parseIdentity(request);
 
