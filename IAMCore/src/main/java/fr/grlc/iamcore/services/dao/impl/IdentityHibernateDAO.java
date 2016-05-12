@@ -36,6 +36,7 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Identity> search(Identity identity) {
 

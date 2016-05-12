@@ -42,7 +42,7 @@
       
 	<% Identity identity = (Identity)request.getAttribute("identity"); %>
       <div class="row marketing">
-        <div id="table">
+        <div id="creationTable">
           <h4>ID</h4>
           <input type="text" name="id" value="<%= identity.getId() %>" class="form-control" readonly>
 		  <br>
@@ -61,7 +61,7 @@
         <br><br><br>
         
         <div style="text-align: center;">
-        	<p><a class="btn btn-lg btn-danger" onclick="handleUpdate()" role="button">update!</a></p>
+        	<p><a class="btn btn-lg btn-danger" onclick="handleRequest('UpdateIdentity')" role="button">update!</a></p>
 		</div>
 		
       </div>

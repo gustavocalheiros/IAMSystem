@@ -52,6 +52,7 @@ public class CreateIdentity extends GenericSpringServlet {
 		
 		JSONObject status = new JSONObject();
 		status.put("status", "200");
+		status.put("msg", "Identity created! :)");
 		
 		PrintWriter out = response.getWriter();
 		out.print(status);

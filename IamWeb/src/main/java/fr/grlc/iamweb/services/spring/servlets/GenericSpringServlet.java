@@ -60,7 +60,12 @@ public class GenericSpringServlet extends HttpServlet {
 		try {
 			String x = request.getParameter("data");
 			JSONObject json = new JSONObject(x);
-
+			
+			int id = 0;
+			if(json.has("id")){
+				id = json.getInt("id");
+			}
+			
 			String fname = json.getString("fname");
 			String lname = json.getString("lname");
 			String email = json.getString("email");
@@ -75,7 +80,10 @@ public class GenericSpringServlet extends HttpServlet {
 				date = (Date) formatter.parse(dateStr);
 			}
 
-			return new Identity(fname, lname, email, date);
+			Identity identity = new Identity(fname, lname, email, date);
+			identity.setId(id);
+			
+			return identity; 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

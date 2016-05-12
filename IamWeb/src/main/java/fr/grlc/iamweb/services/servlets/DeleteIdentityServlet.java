@@ -20,8 +20,8 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 /**
  * Servlet implementation class CreateIdentity
  */
-@WebServlet("/UpdateIdentity")
-public class UpdateIdentityServlet extends GenericSpringServlet {
+@WebServlet("/DeleteIdentity")
+public class DeleteIdentityServlet extends GenericSpringServlet {
 
 	@Autowired
 	IdentityDAOInterface dao;
@@ -36,16 +36,6 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 			throws ServletException, IOException {
 		if (!isLoggedIn(request))
 			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
-		else {
-			String s = request.getParameter("id");
-
-			Identity identity = new Identity(Integer.parseInt(s));
-			identity = dao.search(identity).get(0);
-
-			request.setAttribute("identity", identity);
-
-			getServletContext().getRequestDispatcher("/identity-update.jsp").forward(request, response);
-		}
 	}
 
 	/**
@@ -61,12 +51,17 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 		}
 		
 		try {
-			Identity id = parseIdentity(request);
-			dao.update(id);
+			String id = request.getParameter("data");
+			
+			Identity identity = new Identity();
+			id = id.replace("\"", "");
+			identity.setId(Integer.parseInt(id));
+			
+			dao.delete(identity);
 
 			JSONObject status = new JSONObject();
 			status.put("status", "200");
-			status.put("msg", "Identity updated! :)");
+			status.put("msg", "Identity deleted! :)");
 
 			PrintWriter out = response.getWriter();
 			out.print(status);

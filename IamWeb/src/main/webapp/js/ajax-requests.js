@@ -17,14 +17,16 @@ function handleRequest(action) {
 	});
 }
 
-
-function handleEdit() {
+function handleEdit(action) {
 
 	data = document.querySelector('input[name="selection"]:checked').id;
-	load('UpdateIdentity', function(xhr) {
-		
-		window.location.href = "UpdateIdentity?id=" + data;
-	});
+	if(action == "UpdateIdentity")
+		window.location.href = action + "?id=" + data;
+	else{
+		load(action, function(xhr) {
+			showMessageSucess(xhr);
+		});
+	}
 }
 
 function showSearchResult(xhr) {
@@ -74,7 +76,7 @@ function showMessageSucess(xhr) {
 		var msg = document.getElementById("pageTitle");
 
 		var h3 = document.createElement("h3");
-		h3.innerHTML = "Identity created :)";
+		h3.innerHTML = myData.msg;
 
 		msg.appendChild(h3);
 	}
