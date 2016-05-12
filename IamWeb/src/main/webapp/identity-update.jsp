@@ -1,3 +1,4 @@
+<%@page import="fr.grlc.iamcore.datamodel.Identity" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,13 +11,16 @@
     <meta name="author" content="">
 <!--     <link rel="icon" href="../../favicon.ico"> -->
 
-    <title>Narrow Jumbotron Template for Bootstrap</title>
+    <title>Update Identity</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/jumbotron-narrow.css" rel="stylesheet">
+    
+    
+	<script type="text/javascript" src="js/ajax-requests.js"></script>
 
   </head>
 
@@ -32,29 +36,32 @@
         <h3 class="text-muted">I AM Web</h3>
       </div>
 
-      <div class="jumbotron">
-        <h1>Create Identity</h1>
+      <div id="pageTitle" class="jumbotron">
+        <h1>Update Identity</h1>
       </div>
-<!--       <div id="successMessage"/> -->
-
+      
+	<% Identity identity = (Identity)request.getAttribute("identity"); %>
       <div class="row marketing">
-        <div >
+        <div id="table">
+          <h4>ID</h4>
+          <input type="text" name="id" value="<%= identity.getId() %>" class="form-control" readonly>
+		  <br>
           <h4>First Name</h4>
-          <input type="text" id="fname" class="form-control" required autofocus>
+          <input type="text" name="fname" value="<%= identity.getFirstName() %>" class="form-control" required autofocus>
 		  <br>
           <h4>Last Name</h4>
-          <input type="text" id="lname" class="form-control" required>
+          <input type="text" name="lname" value="<%= identity.getLastName() %>" class="form-control" required>
 		  <br>
           <h4>Email</h4>
-          <input type="email" id="email" class="form-control" required>
+          <input type="email" name="email" value="<%= identity.getEmail() %>" class="form-control" required readonly>
           <br>
           <h4>Birth Date</h4>
-          <input type="date" id="birthdate" class="form-control" required>
+          <input type="date" name="birthdate" value="<%= identity.getBirthDate() %>" class="form-control" required>
         </div>
         <br><br><br>
         
         <div style="text-align: center;">
-        	<p><a class="btn btn-lg btn-danger" onclick="createIdentityRequest('CreateIdentity')" role="button">create!</a></p>
+        	<p><a class="btn btn-lg btn-danger" onclick="handleUpdate()" role="button">update!</a></p>
 		</div>
 		
       </div>
