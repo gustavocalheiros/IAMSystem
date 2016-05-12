@@ -34,7 +34,7 @@ public class CreateIdentity extends GenericSpringServlet {
 		if(!isLoggedIn(request))
 			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 		else
-			getServletContext().getRequestDispatcher("/create-identity.html").forward(request, response);
+			getServletContext().getRequestDispatcher("/identity-create.html").forward(request, response);
 	}
 
 	/**

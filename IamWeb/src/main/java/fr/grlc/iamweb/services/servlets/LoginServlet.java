@@ -1,6 +1,5 @@
 package fr.grlc.iamweb.services.servlets;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -22,7 +21,7 @@ import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
- * Servlet implementation class CreateIdentity
+ * Servlet implementation class LoginServlet
  */
 @WebServlet("/Login")
 public class LoginServlet extends GenericSpringServlet {
@@ -49,17 +48,7 @@ public class LoginServlet extends GenericSpringServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		//
-		String str = "";
-		BufferedReader reader = request.getReader();
-		String part = "";
-		while (part != null) {
-			str += part;
-			part = reader.readLine();
-		}
-
-		JSONObject json = new JSONObject(str);
-		// JSONObject json = new JSONObject(request.getParameter("data"));
+		JSONObject json = new JSONObject(request.getParameter("data"));
 		String user = json.getString("user");
 
 		if (user == null)
@@ -79,7 +68,7 @@ public class LoginServlet extends GenericSpringServlet {
 		if (storedUser.equals(user) && storedPassword.equals(passwordMd5)) {
 			HttpSession session = request.getSession();
 			session.setAttribute(sessionUser, user);
-			session.setMaxInactiveInterval(60 * 5); // COMMENT
+			session.setMaxInactiveInterval(60 * 5); // TODO COMMENT
 
 			JSONObject status = new JSONObject();
 			status.put("status", "200");

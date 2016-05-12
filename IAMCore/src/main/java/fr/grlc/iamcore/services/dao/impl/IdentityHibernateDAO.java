@@ -42,12 +42,18 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 		Session session = factory.openSession();
 		String q = "from Identity identity where ";
 
+		int id = identity.getId();
 		String fname = identity.getFirstName();
 		String lname = identity.getLastName();
 		String email = identity.getEmail();
 		Date date = identity.getBirthDate();
 		String and = " and ";
 
+		if (id != 0) {
+			q += "identity.id = " + id;
+			q += and;
+		}
+		
 		if (fname != null && !fname.isEmpty()) {
 			q += "identity.firstName = " + "\'" + fname + "\'";
 			q += and;

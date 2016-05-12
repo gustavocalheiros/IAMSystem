@@ -17,6 +17,16 @@ function handleRequest(action) {
 	});
 }
 
+
+function handleEdit() {
+
+	data = document.querySelector('input[name="selection"]:checked').id;
+	load('UpdateIdentity', function(xhr) {
+		
+		window.location.href = "UpdateIdentity?id=" + data;
+	});
+}
+
 function showSearchResult(xhr) {
 	data = JSON.parse(xhr.responseText);
 
@@ -30,9 +40,9 @@ function showSearchResult(xhr) {
 		for (var i = 1; i < data.length; i++) {
 
 			var tr = document.createElement("tr");
-
+			
 			var td0 = document.createElement("td");
-			td0.innerHTML = "<input name=\"selection\" type=\"radio\"/>"
+			td0.innerHTML = "<input name=\"selection\" id=\"" +  data[i].id + "\"  type=\"radio\"/>"
 
 			var td1 = document.createElement("td");
 			td1.innerHTML = data[i].fname;

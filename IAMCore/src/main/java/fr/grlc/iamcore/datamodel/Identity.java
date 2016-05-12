@@ -1,6 +1,3 @@
-/**
- * 
- */
 package fr.grlc.iamcore.datamodel;
 
 import java.util.Date;
@@ -15,8 +12,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * @author Tom
- *
+ * Class Identity, represents the main entity of the application.
+ * 
+ * @author Gustavo Calheiros
  */
 
 @Entity
@@ -45,6 +43,10 @@ public class Identity {
 		
 	}
 	
+	public Identity(int id){
+		this.id = id;
+	}
+	
 	public Identity(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -58,6 +60,7 @@ public class Identity {
 		this.email = email;
 		this.birthDate = birthdate;
 	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

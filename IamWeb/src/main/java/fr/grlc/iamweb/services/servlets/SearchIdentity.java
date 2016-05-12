@@ -37,7 +37,7 @@ public class SearchIdentity extends GenericSpringServlet {
 		if(!isLoggedIn(request))
 			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 		else
-			getServletContext().getRequestDispatcher("/search-identity.html").forward(request, response);
+			getServletContext().getRequestDispatcher("/identity-search.html").forward(request, response);
 	}
 
 	/**
@@ -65,6 +65,7 @@ public class SearchIdentity extends GenericSpringServlet {
 
 			for (Identity identity : list) {
 				JSONObject idJson = new JSONObject();
+				idJson.put("id", identity.getId());
 				idJson.put("fname", identity.getFirstName());
 				idJson.put("lname", identity.getLastName());
 				idJson.put("email", identity.getEmail());
