@@ -22,7 +22,7 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
  * @author gustavo
  */
 @WebServlet("/CreateIdentity")
-public class CreateIdentity extends GenericSpringServlet {
+public class CreateIdentityServlet extends GenericSpringServlet {
 	
 	@Autowired
 	IdentityDAOInterface dao;

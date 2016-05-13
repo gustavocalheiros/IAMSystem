@@ -24,7 +24,7 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
  * @author gustavo
  */
 @WebServlet("/SearchIdentity")
-public class SearchIdentity extends GenericSpringServlet {
+public class SearchIdentityServlet extends GenericSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
