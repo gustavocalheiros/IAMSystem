@@ -4,6 +4,10 @@ import java.util.List;
 
 import fr.grlc.iamcore.datamodel.Identity;
 
+/**
+ * Interface for the DAO
+ * @author gustavo
+ */
 public interface IdentityDAOInterface {
 
 	public List<Identity> readAll();

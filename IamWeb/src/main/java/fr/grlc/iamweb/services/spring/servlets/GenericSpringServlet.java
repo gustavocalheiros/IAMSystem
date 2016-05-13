@@ -2,6 +2,7 @@ package fr.grlc.iamweb.services.spring.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,17 +27,18 @@ import fr.grlc.iamcore.datamodel.Identity;
 public class GenericSpringServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	final static Logger logger = Logger.getLogger(GenericSpringServlet.class);
+	final static protected Logger logger = Logger.getLogger(GenericSpringServlet.class);
 
+	protected final String LOGIN_PAGE = "/index.html";
 	protected final String sessionUser = "user";
 
-	// LINK THE WEBCONTEXT WITH THE SPRING CONTEXT
+	/**
+	 * 	Init config and links THE WEBCONTEXT WITH THE SPRING CONTEXT
+	 */
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-
-		logger.info("INIT CALLED!!!!!!!!!!!!!!");
 	}
 
 	protected boolean isLoggedIn(HttpServletRequest request) {
@@ -46,17 +48,35 @@ public class GenericSpringServlet extends HttpServlet {
 		return session != null && session.getAttribute(sessionUser) != null;
 	}
 
+	/**
+	 * Writes in the response information about the need to login
+	 * 
+	 * @param response HttpResponse
+	 * @throws IOException
+	 */
 	protected void writeLoginNeededInfo(HttpServletResponse response) throws IOException {
+		
+		logger.info("not logged in (timeout)");
 		PrintWriter out = response.getWriter();
 		JSONArray jsonArray = new JSONArray();
 		JSONObject status = new JSONObject();
-		status.put("status", "408");
+		status.put("status", Integer.toString(HttpURLConnection.HTTP_CLIENT_TIMEOUT));
 		jsonArray.put(status);
 		out.print(jsonArray);
 	}
 
+	
+	/**
+	 * Parse JSON and returns an Identity
+	 * 
+	 * @param request HttpServletRequest
+	 * @return Identity
+	 * @throws IOException Malformed JSON
+	 */
 	protected Identity parseIdentity(HttpServletRequest request) throws IOException {
 
+		logger.info("Parsing Identity...");
+		
 		try {
 			String x = request.getParameter("data");
 			JSONObject json = new JSONObject(x);

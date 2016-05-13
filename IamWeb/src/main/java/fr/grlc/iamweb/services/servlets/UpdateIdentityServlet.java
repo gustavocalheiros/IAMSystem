@@ -2,6 +2,7 @@ package fr.grlc.iamweb.services.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,8 @@ import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
- * Servlet implementation class CreateIdentity
+ * Servlet implementation class UpdateIdentity
+ * @author gustavo
  */
 @WebServlet("/UpdateIdentity")
 public class UpdateIdentityServlet extends GenericSpringServlet {
@@ -29,13 +31,15 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Handles the get request. if not logged in, redirect to "login" page.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
 		else {
 			String s = request.getParameter("id");
 
@@ -49,6 +53,8 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 	}
 
 	/**
+	 * Handles the request and uses the DAO to update the identity in the DB.
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -65,7 +71,7 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 			dao.update(id);
 
 			JSONObject status = new JSONObject();
-			status.put("status", "200");
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
 			status.put("msg", "Identity updated! :)");
 
 			PrintWriter out = response.getWriter();

@@ -8,9 +8,9 @@
     	<property name="factory" ref="beanBasedSessionFactory" />
     </bean>
 
-	<bean id="selectIdentityByEmail" class="java.lang.String">
+	<bean id="timeExpirationSession" class="java.lang.Integer">
 		<constructor-arg>
-			<value>from Identity identity where identity.email =:email</value>
+			<value>300</value>
 		</constructor-arg>
 	</bean>
      

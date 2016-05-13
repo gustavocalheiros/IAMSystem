@@ -2,6 +2,7 @@ package fr.grlc.iamweb.services.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,7 +19,7 @@ import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
- * Servlet implementation class CreateIdentity
+ * Servlet implementation class DeletyeIdentity
  */
 @WebServlet("/DeleteIdentity")
 public class DeleteIdentityServlet extends GenericSpringServlet {
@@ -29,16 +30,20 @@ public class DeleteIdentityServlet extends GenericSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Handles the get request. if not logged in, redirect to "login" page.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		if (!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
 	}
 
 	/**
+	 * Handles the request and uses the DAO to delete the identity from the DB.
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
@@ -60,7 +65,7 @@ public class DeleteIdentityServlet extends GenericSpringServlet {
 			dao.delete(identity);
 
 			JSONObject status = new JSONObject();
-			status.put("status", "200");
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
 			status.put("msg", "Identity deleted! :)");
 
 			PrintWriter out = response.getWriter();

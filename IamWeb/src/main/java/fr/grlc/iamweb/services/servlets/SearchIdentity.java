@@ -2,6 +2,7 @@ package fr.grlc.iamweb.services.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
  * Servlet implementation class SearchIdentity
+ * @author gustavo
  */
 @WebServlet("/SearchIdentity")
 public class SearchIdentity extends GenericSpringServlet {
@@ -29,13 +31,16 @@ public class SearchIdentity extends GenericSpringServlet {
 	IdentityDAOInterface dao;
 
 	/**
+	 * Handles the get request. if not logged in, redirect to "login" page.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		if(!isLoggedIn(request))
-			getServletContext().getRequestDispatcher("/index.html").forward(request, response);
+			getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
 		else
 			getServletContext().getRequestDispatcher("/identity-search.html").forward(request, response);
 	}
@@ -59,7 +64,7 @@ public class SearchIdentity extends GenericSpringServlet {
 
 			JSONArray jsonArray = new JSONArray();
 			JSONObject status = new JSONObject();
-			status.put("status", "200");
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
 
 			jsonArray.put(status);
 
@@ -79,7 +84,7 @@ public class SearchIdentity extends GenericSpringServlet {
 
 			PrintWriter out = response.getWriter();
 			JSONObject status = new JSONObject();
-			status.put("status", "400");
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
 			out.print(status);
 		}
 	}
