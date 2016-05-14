@@ -53,6 +53,7 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 
 		Session session = factory.openSession();
 		String q = "from Identity identity where ";
+		int lenBeforeEdition = q.length();
 
 		int id = identity.getId();
 		String fname = identity.getFirstName();
@@ -90,6 +91,11 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 			}
 		}
 
+		//Search with empty fields!
+		if(q.length() == lenBeforeEdition){
+			return null;
+		}
+		
 		Query query = session.createQuery(q);
 
 		if (date != null) {

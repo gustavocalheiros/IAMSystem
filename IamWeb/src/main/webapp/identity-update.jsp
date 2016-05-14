@@ -9,7 +9,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-<!--     <link rel="icon" href="../../favicon.ico"> -->
+    <link rel="icon" href="res/favicon.ico">
 
     <title>Update Identity</title>
 
@@ -30,7 +30,7 @@
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="index.html">Home</a></li>
+            <li role="presentation" class="active"><a href="home.html">Home</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">I AM Web</h3>
@@ -38,6 +38,7 @@
 
       <div id="pageTitle" class="jumbotron">
         <h1>Update Identity</h1>
+        <h4 id="errorMsg" style="color:red;" hidden="true"></h4>
       </div>
       
 	<% Identity identity = (Identity)request.getAttribute("identity"); %>

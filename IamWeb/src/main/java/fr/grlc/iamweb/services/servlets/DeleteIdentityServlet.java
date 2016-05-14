@@ -20,6 +20,7 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
  * Servlet implementation class DeletyeIdentity
+ * @author gustavos
  */
 @WebServlet("/DeleteIdentity")
 public class DeleteIdentityServlet extends GenericSpringServlet {
@@ -71,7 +72,7 @@ public class DeleteIdentityServlet extends GenericSpringServlet {
 			PrintWriter out = response.getWriter();
 			out.print(status);
 		} catch (JSONException ex) {
-			// do nothing
+			logger.error(ex.toString());
 		}
 	}
 }

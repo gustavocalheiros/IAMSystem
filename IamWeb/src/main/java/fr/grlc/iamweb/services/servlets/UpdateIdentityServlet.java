@@ -77,7 +77,7 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 			PrintWriter out = response.getWriter();
 			out.print(status);
 		} catch (JSONException ex) {
-			// do nothing
+			logger.error(ex.toString());
 		}
 	}
 }

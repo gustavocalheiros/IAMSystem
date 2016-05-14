@@ -37,13 +37,17 @@ public class LoginServlet extends GenericSpringServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * If logged in, redirects to home.html
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
+		if(!isLoggedIn(request))
+			getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
+		else
+			getServletContext().getRequestDispatcher("/home.html").forward(request, response);
 	}
 
 	/**
@@ -58,9 +62,12 @@ public class LoginServlet extends GenericSpringServlet {
 		JSONObject json = new JSONObject(request.getParameter("data"));
 		String user = json.getString("user");
 
-		if (user == null)
+		if (user == null || user.isEmpty())
 			return;
 
+		JSONObject status = new JSONObject();
+		PrintWriter out = response.getWriter();
+		
 		// loads the information stored from the user
 		InputStream in = getClass().getClassLoader().getResourceAsStream("user.properties");
 		Properties prop = new Properties();
@@ -79,19 +86,12 @@ public class LoginServlet extends GenericSpringServlet {
 			session.setAttribute(sessionUser, user);
 			session.setMaxInactiveInterval(timeExpirationSession);
 
-			JSONObject status = new JSONObject();
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
-
-			PrintWriter out = response.getWriter();
-			out.print(status);
 		}else{
-			JSONObject status = new JSONObject();
 			
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_UNAUTHORIZED));
-
-			PrintWriter out = response.getWriter();
-			out.print(status);
 		}
+		out.print(status);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class LoginServlet extends GenericSpringServlet {
 		try {
 			md = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 		md.update(password.getBytes());
 

@@ -16,7 +16,7 @@ import fr.grlc.iamcore.datamodel.Identity;
 import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 
 /**
- * Unit test for the Identity Class 
+ * Unit test for the DAO 
  * 
  * @author gustavo
  */
@@ -24,11 +24,11 @@ import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
 @ContextConfiguration(locations={"../application-context.xml"})
 public class IdentityHibernateDAOTest {
 	
-	private static final String fname = "Gustavo";
-	private static final String fname2 = "Gustavo2";
-	private static final String lname = "Calheiros";
-	private static final String email = "gustavo@epita.com";
-	private static final Date birthdate = new Date();
+	private final String fname = "Gustavo";
+	private final String fname2 = "Gustavo2";
+	private final String lname = "Calheiros";
+	private final String email = "gustavo@epita.com";
+	private Date birthdate = new Date();
 	private Identity identity = new Identity(fname, lname, email, birthdate);
 	
 	@Autowired
@@ -50,6 +50,9 @@ public class IdentityHibernateDAOTest {
 		}
 	}
 	
+	/**
+	 * identity creation and search
+	 */
 	@Test
 	public void testCreateSearchIdentity(){
 		
@@ -59,6 +62,9 @@ public class IdentityHibernateDAOTest {
 		Assert.assertEquals(identity.getEmail(), id.getEmail());
 	}
 	
+	/**
+	 * identity edition
+	 */
 	@Test
 	public void testUpdateIdentity(){
 
@@ -77,6 +83,9 @@ public class IdentityHibernateDAOTest {
 		dao.update(id);
 	}
 	
+	/**
+	 * identity deletion
+	 */
 	@Test
 	public void testDeleteIdentity(){
 

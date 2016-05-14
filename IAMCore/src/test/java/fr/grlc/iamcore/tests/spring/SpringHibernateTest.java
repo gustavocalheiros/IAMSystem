@@ -13,6 +13,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+/**
+ * Unit tests for Hibernate
+ * @author gustavo
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class) //This is to tell Junit to run with spring
 @ContextConfiguration(locations={"../application-context.xml"}) // to tell spring to load the required context
 public class SpringHibernateTest {

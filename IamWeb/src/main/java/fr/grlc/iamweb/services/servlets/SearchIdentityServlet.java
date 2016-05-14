@@ -21,6 +21,7 @@ import fr.grlc.iamweb.services.spring.servlets.GenericSpringServlet;
 
 /**
  * Servlet implementation class SearchIdentity
+ * 
  * @author gustavo
  */
 @WebServlet("/SearchIdentity")
@@ -30,6 +31,8 @@ public class SearchIdentityServlet extends GenericSpringServlet {
 	@Autowired
 	IdentityDAOInterface dao;
 
+	private static final int ID_READ_ALL = -1;
+
 	/**
 	 * Handles the get request. if not logged in, redirect to "login" page.
 	 * 
@@ -38,8 +41,8 @@ public class SearchIdentityServlet extends GenericSpringServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		if(!isLoggedIn(request))
+
+		if (!isLoggedIn(request))
 			getServletContext().getRequestDispatcher(LOGIN_PAGE).forward(request, response);
 		else
 			getServletContext().getRequestDispatcher("/identity-search.html").forward(request, response);
@@ -51,41 +54,56 @@ public class SearchIdentityServlet extends GenericSpringServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
-		if(!isLoggedIn(request)){
+
+		if (!isLoggedIn(request)) {
 			writeLoginNeededInfo(response);
 			return;
 		}
 		
+		PrintWriter out = response.getWriter();
+		
 		Identity id = parseIdentity(request);
+		JSONArray jsonArray = new JSONArray();
+		JSONObject status = new JSONObject();
 
 		if (id != null) {
-			List<Identity> list = dao.search(id);
 
-			JSONArray jsonArray = new JSONArray();
-			JSONObject status = new JSONObject();
-			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
+			List<Identity> list = null;
 
-			jsonArray.put(status);
-
-			for (Identity identity : list) {
-				JSONObject idJson = new JSONObject();
-				idJson.put("id", identity.getId());
-				idJson.put("fname", identity.getFirstName());
-				idJson.put("lname", identity.getLastName());
-				idJson.put("email", identity.getEmail());
-				idJson.put("birthdate", identity.getBirthDate());
-				jsonArray.put(idJson);
+			if (id.getId() == ID_READ_ALL) {
+				list = dao.readAll();
+			} else {
+				list = dao.search(id);
 			}
 
-			PrintWriter out = response.getWriter();
-			out.print(jsonArray);
+			if (list != null) {
+				status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
+
+				jsonArray.put(status);
+
+				for (Identity identity : list) {
+					JSONObject idJson = new JSONObject();
+					idJson.put("id", identity.getId());
+					idJson.put("fname", identity.getFirstName());
+					idJson.put("lname", identity.getLastName());
+					idJson.put("email", identity.getEmail());
+					idJson.put("birthdate", identity.getBirthDate());
+					jsonArray.put(idJson);
+				}
+
+				out.print(jsonArray);
+			} else {
+				status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
+				status.put("msg", "at least one field has to be filled!");
+				jsonArray.put(status);
+				out.print(jsonArray);
+			}
 		} else {
 
-			PrintWriter out = response.getWriter();
-			JSONObject status = new JSONObject();
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
-			out.print(status);
+			status.put("msg", "internal error");
+			jsonArray.put(status);
+			out.print(jsonArray);
 		}
 	}
 

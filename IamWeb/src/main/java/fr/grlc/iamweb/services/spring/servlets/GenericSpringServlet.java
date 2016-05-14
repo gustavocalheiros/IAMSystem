@@ -41,6 +41,12 @@ public class GenericSpringServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
+	/**
+	 * Check if the user is logged in
+	 * 
+	 * @param request To be evaluated
+	 * @return true for logged in, else otherwise
+	 */
 	protected boolean isLoggedIn(HttpServletRequest request) {
 		HttpSession session = request.getSession(false); // false = do not
 															// create
@@ -65,7 +71,6 @@ public class GenericSpringServlet extends HttpServlet {
 		out.print(jsonArray);
 	}
 
-	
 	/**
 	 * Parse JSON and returns an Identity
 	 * 
@@ -76,10 +81,10 @@ public class GenericSpringServlet extends HttpServlet {
 	protected Identity parseIdentity(HttpServletRequest request) throws IOException {
 
 		logger.info("Parsing Identity...");
-		
+
+		Identity identity = null;
 		try {
-			String x = request.getParameter("data");
-			JSONObject json = new JSONObject(x);
+			JSONObject json = new JSONObject(request.getParameter("data"));
 			
 			int id = 0;
 			if(json.has("id")){
@@ -100,14 +105,13 @@ public class GenericSpringServlet extends HttpServlet {
 				date = (Date) formatter.parse(dateStr);
 			}
 
-			Identity identity = new Identity(fname, lname, email, date);
+			identity = new Identity(fname, lname, email, date);
 			identity.setId(id);
 			
-			return identity; 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.toString());
 		}
 
-		return null;
+		return identity;
 	}
 }
