@@ -66,18 +66,22 @@ public class UpdateIdentityServlet extends GenericSpringServlet {
 			return;
 		}
 		
+		JSONObject status = new JSONObject();
+		PrintWriter out = response.getWriter();
+		
 		try {
 			Identity id = parseIdentity(request);
 			dao.update(id);
 
-			JSONObject status = new JSONObject();
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
 			status.put("msg", "Identity updated! :)");
-
-			PrintWriter out = response.getWriter();
-			out.print(status);
 		} catch (JSONException ex) {
 			logger.error(ex.toString());
+			
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
+			status.put("msg", ex.toString());
 		}
+		
+		out.print(status);
 	}
 }

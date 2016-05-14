@@ -13,9 +13,11 @@ function handleRequest(action) {
 	data = {};
 	
 	var allFieldsFilled = true;
-	
+
+	// gets all the fields values.
 	for (var i = 0; i < inputs.length; i++) {
-		
+	
+		//test if all the fields are filled
 		allFieldsFilled &= inputs[i].value != "";			
 		
 		data[inputs[i].name] = inputs[i].value;
@@ -76,9 +78,10 @@ function showSearchResult(xhr) {
 	var table = document.getElementById("resultsBody");
 	table.innerHTML = '';
 
-	if (data[0].status == '408') {
+
+	if (data[0].status == '408') { 	// if 408, back to login
 		window.location.href = "index.html";
-	} else if (data[0].status == '400') { 
+	} else if (data[0].status == '400') {  // if 400, bad request
 		showStatusMsg(data[0].msg);
 	}else if (data[0].status == '200') {
 
@@ -125,6 +128,12 @@ function showMessageSucess(xhr) {
 	}
 }
 
+/**
+ * Send info via ajax
+ * 
+ * @param url Servlet to be called
+ * @param callback Function to be called
+ */
 function load(url, callback) {
 	var xhr;
 
@@ -201,6 +210,11 @@ function login(action) {
 	}
 }
 
+/**
+ * Show status message under the title and scrolls the page to the top
+ * 
+ * @param msg Message to be shown
+ */
 function showStatusMsg(msg){
 	var f = document.getElementById('errorMsg');
 	f.hidden = false;

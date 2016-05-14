@@ -55,6 +55,9 @@ public class DeleteIdentityServlet extends GenericSpringServlet {
 			writeLoginNeededInfo(response);
 			return;
 		}
+
+		JSONObject status = new JSONObject();
+		PrintWriter out = response.getWriter();
 		
 		try {
 			String id = request.getParameter("data");
@@ -65,14 +68,16 @@ public class DeleteIdentityServlet extends GenericSpringServlet {
 			
 			dao.delete(identity);
 
-			JSONObject status = new JSONObject();
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_OK));
 			status.put("msg", "Identity deleted! :)");
 
-			PrintWriter out = response.getWriter();
-			out.print(status);
 		} catch (JSONException ex) {
 			logger.error(ex.toString());
+			
+			status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
+			status.put("msg", ex.toString());
 		}
+		
+		out.print(status);
 	}
 }

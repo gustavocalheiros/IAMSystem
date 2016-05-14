@@ -106,7 +106,8 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 	}
 
 	/**
-	 * 
+	 * Writes an Identity in the DB
+	 * @param identity to be written
 	 */
 	@Override
 	public void write(Identity identity) {
@@ -119,6 +120,10 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 		transaction.commit();
 	}
 
+	/**
+	 * Updates one Identity
+	 * @param identity to be updated
+	 */
 	@Override
 	public void update(Identity identity) {
 		logger.info("Updating Identiy: " + identity.getFirstName() + " " + identity.getLastName() + " : "
@@ -131,6 +136,10 @@ public class IdentityHibernateDAO implements IdentityDAOInterface {
 
 	}
 
+	/**
+	 * Deletes one identity
+	 * @param identity to be deleted.
+	 */
 	@Override
 	public void delete(Identity identity) {
 		logger.info("Deleting Identiy: " + identity.getFirstName() + " " + identity.getLastName() + " : "

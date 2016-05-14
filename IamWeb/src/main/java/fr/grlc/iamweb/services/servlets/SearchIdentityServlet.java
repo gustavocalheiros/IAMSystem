@@ -90,21 +90,19 @@ public class SearchIdentityServlet extends GenericSpringServlet {
 					idJson.put("birthdate", identity.getBirthDate());
 					jsonArray.put(idJson);
 				}
-
-				out.print(jsonArray);
 			} else {
 				status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
 				status.put("msg", "at least one field has to be filled!");
 				jsonArray.put(status);
-				out.print(jsonArray);
 			}
 		} else {
 
 			status.put("status", Integer.toString(HttpURLConnection.HTTP_BAD_REQUEST));
 			status.put("msg", "internal error");
 			jsonArray.put(status);
-			out.print(jsonArray);
 		}
+		
+		out.print(jsonArray);
 	}
 
 }
