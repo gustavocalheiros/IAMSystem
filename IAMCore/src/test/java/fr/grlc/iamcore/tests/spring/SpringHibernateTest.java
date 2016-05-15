@@ -19,7 +19,7 @@ import org.springframework.util.Assert;
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class) //This is to tell Junit to run with spring
-@ContextConfiguration(locations={"../application-context.xml"}) // to tell spring to load the required context
+@ContextConfiguration(locations={"classpath:application-context.xml"})
 public class SpringHibernateTest {
 	
 	@Autowired

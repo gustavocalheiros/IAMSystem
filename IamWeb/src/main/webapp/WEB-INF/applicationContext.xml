@@ -6,7 +6,10 @@
 	   					   
     <bean id="dao" class="fr.grlc.iamcore.services.dao.impl.IdentityHibernateDAO">
     	<property name="factory" ref="beanBasedSessionFactory" />
+		<property name="builder" ref="queryBuilder"/>
     </bean>
+    
+    <bean id="queryBuilder" class="fr.grlc.iamcore.querybuilder.impl.IdentityQueryBuilder"/>
 
 	<bean id="timeExpirationSession" class="java.lang.Integer">
 		<constructor-arg>

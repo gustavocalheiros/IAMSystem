@@ -21,7 +21,7 @@ import fr.grlc.iamcore.services.dao.IdentityDAOInterface;
  * @author gustavo
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"../application-context.xml"})
+@ContextConfiguration(locations={"classpath:application-context.xml"})
 public class IdentityHibernateDAOTest {
 	
 	private final String fname = "Gustavo";

@@ -4,17 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
 	   					   
-    <bean id="firstDAO" class="fr.grlc.iamcore.services.dao.impl.IdentityHibernateDAO"/>
-
-	<bean id="selectIdentityByEmail" class="java.lang.String">
-		<constructor-arg>
-			<value>from Identity identity where identity.email =:email</value>
-		</constructor-arg>
-	</bean>
-     
+    <bean id="dao" class="fr.grlc.iamcore.services.dao.impl.IdentityHibernateDAO">
+    	<property name="factory" ref="beanBasedSessionFactory" />
+		<property name="builder" ref="queryBuilder"/>
+    </bean>
+    
+    <bean id="queryBuilder" class="fr.grlc.iamcore.querybuilder.impl.IdentityQueryBuilder"/>
+    
     <bean id="dataSourceBean" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver"/>
-		<property name="url" value="jdbc:derby://localhost:1527/IAM;create=true"/>
+		<property name="url" value="jdbc:derby://localhost:1527/memory:IAM;create=true"/>
 		<property name="username" value="tom"/>
 		<property name="password" value="tom"/>
 	</bean>
@@ -30,7 +29,7 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyTenSevenDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.connection.autocommit">false</prop>
 			</props>
 		</property>
