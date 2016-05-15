@@ -45,7 +45,7 @@
       <div class="row marketing">
         <div id="creationTable">
 <!--           <h4>ID</h4> -->
-<%--           <input type="text" name="id" value="<%= identity.getId() %>" class="form-control" readonly> --%>
+          <input type="text" style="display:none;" name="id" value="<%= identity.getId() %>" class="form-control">
 <!-- 		  <br> -->
           <h4>First Name</h4>
           <input type="text" name="fname" value="<%= identity.getFirstName() %>" class="form-control" required autofocus>
